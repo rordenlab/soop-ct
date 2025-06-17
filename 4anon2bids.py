@@ -36,7 +36,7 @@ def make_bids_boilerplate(bids_dir: Path):
         participants_tsv.write_text("participant_id\n")
         print(f"Created {participants_tsv}")
 
-def copy_crop_to_bids(input_dir: Path, output_dir: Path):
+def copy_anon_to_bids(input_dir: Path, output_dir: Path):
     input_dir = input_dir.resolve()
     output_dir = output_dir.resolve()
 
@@ -70,11 +70,11 @@ def main(input_dir: Path, output_dir: Path):
 
     output_dir.mkdir(parents=True, exist_ok=True)
     make_bids_boilerplate(output_dir)
-    copy_crop_to_bids(input_dir, output_dir)
+    copy_anon_to_bids(input_dir, output_dir)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Convert cropped CT images into BIDS structure.")
-    parser.add_argument("input_dir", nargs="?", default="./crop", help="Folder containing *_ct.nii(.gz) and JSON")
+    parser = argparse.ArgumentParser(description="Convert anonymized CT images into BIDS structure.")
+    parser.add_argument("input_dir", nargs="?", default="./anon", help="Folder containing *_ct.nii(.gz) and JSON")
     parser.add_argument("output_dir", nargs="?", default="./bids", help="Target BIDS folder")
     args = parser.parse_args()
 

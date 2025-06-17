@@ -33,8 +33,7 @@ python 1dcm2raw.py ./DICOM ./raw
 python 2raw2best.py ./raw ./best
 # Check generated JPGs to ensure correct image selection
 python 3best2anon.py ./best ./anon
-python 4anon2crop.py ./anon ./crop 
-python 5crop2bids.py ./crop ./bids
+python 4anon2bids.py ./anon ./bids
 # Optional group-level analysis
 python 6bids2norm.py ./bids
 python nii2mean.py ./bids/derivatives/syncro _ct.nii.gz
@@ -44,6 +43,12 @@ It is advisable to inspect the results after each stage. This modular pipeline a
 
 ### Processing Stages
 
+The diagram below shows the six processing stages. Arrows indicate transformation from input to output.
+
+![Processing stages Hounsfield -20..150](stages.jpg)
+**Figure 1** A: Convert DICOM to NIfTI. B: Select best soft-tissue CT. C: Anonymize and crop. D: Convert to BIDS. E: Spatial normalization.
+
+
 1. **`1dcm2raw.py [input_dir] [output_dir]`**
    Converts all DICOM images to NIfTI format. Files are stored in folders named by accession number. Series are named using the series number and protocol name. Interpolation corrects for variable slice thickness and gantry tilt.
 
@@ -52,28 +57,31 @@ It is advisable to inspect the results after each stage. This modular pipeline a
    - Uses helper script `dir2jpg.py` to generate previews.
 
 3. **`3best2anon.py [input_dir] [output_dir]`**  
-   Renames files using anonymized IDs. Generates a `lookup.tsv` file to map accession numbers to anonymized IDs. This file should be kept secure.
+   Renames files using anonymized IDs. Generates a `lookup.tsv` file to map accession numbers to anonymized IDs. This file should be kept secure. Bis and brain-extracts each image to remove facial features and de-identify data. By default, the mask is dilated 25mm beyond the brain boundary. This script has three constants that you may want to adjust
+   - `modality = "ct"` will define the BIDS modality.
+   - `border = 25` specifies dilation of brain extraction. Smaller values remove scalp features.
+   - `random.seed(42)` can be changed so identical inputs will yield a different scrambled ID.
 
-4. **`4anon2crop.py [input_dir] [output_dir]`**  
-   Crops and brain-extracts each image to remove facial features and de-identify data. By default, the mask is dilated 25mm beyond the brain boundary.
-
-5. **`5crop2bids.py [input_dir] [output_dir`]**  
+4. **`4anon2bids.py [input_dir] [output_dir`]**  
    Converts cropped images to BIDS format. Also generates placeholder boilerplate files:
    - `dataset_description.json`
    - `participants.tsv`
    - `participants.json`
 
-6. **`6bids2norm.py [bids_dir]`**  
+5. **`5bids2norm.py [bids_dir]`**  
    Normalizes each image to a common space (MNI152). Saves outputs in the `derivatives/syncro` directory.
    - Calls `SYNcro.py` to register each image using ANTs.
    - Uses FreeSurfer's SynthSR to synthesize a T1-weighted image from CT.
+   - Uses brainchop for an approximate brain extraction.
+   - Uses ANTS to align images to standard space
+   - Images aligned to the FSL template `MNI152_T1_1mm_brain.nii.gz`
 
 7. **`nii2mean.py [input_dir] [filter]`**  
    Creates a group-average image from all files in the input folder matching the specified filter.
 
-Below is an example of the average of normalized CT images (albeit the full initial SOOP-CT dataset, not the small demo).
-
 ![Averaging of nii2mean with MRIcroGL H 0.4 A -8 8 24 40 C -24 0 S X R 0](mean.jpg)
+**Figure 2** Mean normalized CT image (full SOOP-CT dataset).
+
 
 ## Links
 
