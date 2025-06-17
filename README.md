@@ -35,7 +35,7 @@ python 2raw2best.py ./raw ./best
 python 3best2anon.py ./best ./anon
 python 4anon2bids.py ./anon ./bids
 # Optional group-level analysis
-python 6bids2norm.py ./bids
+python 5bids2norm.py ./bids
 python nii2mean.py ./bids/derivatives/syncro _ct.nii.gz
 ```
 
