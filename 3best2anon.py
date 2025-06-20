@@ -108,6 +108,12 @@ def main(src_dir: Path, dst_dir: Path):
 
             shutil.copy2(nii, new_nii)
             do_brainchop(new_nii, new_nii, modality == "ct", border)
+            nii_path = new_nii
+            if not nii_path.exists() and nii_path.suffix == ".nii":
+                gz_path = nii_path.with_suffix(".nii.gz")
+                if gz_path.exists():
+                    nii_path = gz_path
+            remove_zero_margins(nii_path, nii_path, modality == "ct", False, True)
             shutil.copy2(old_json, new_json)
 
             try:

@@ -34,7 +34,6 @@ import sys
 
 import nibabel as nib
 
-ROOT = Path("/Volumes/TB5/CT/raw")      # <-- change if needed
 LOG_LEVEL = logging.INFO                   # INFO or DEBUG for more detail
 OUT_EXT = ".nii"                           # output images get this extension
 
