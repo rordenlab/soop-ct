@@ -55,6 +55,7 @@ The diagram below shows the six processing stages. Arrows indicate transformatio
 2. **`2raw2best.py [input_dir] [output_dir]`** 
    Selects the best series from each study based on slice thickness, field of view, and soft-tissue convolution kernel. Creates corresponding JPEGs for quality control.
    - Uses helper script `dir2jpg.py` to generate previews.
+   - The helper script `deshear.py` removes rounding errors that can be detected as [shear](https://github.com/rordenlab/dcm2niix/issues/945).
 
 3. **`3best2anon.py [input_dir] [output_dir]`**  
    Renames files using anonymized IDs. Generates a `lookup.tsv` file to map accession numbers to anonymized IDs. This file should be kept secure. Bis and brain-extracts each image to remove facial features and de-identify data. By default, the mask is dilated 25mm beyond the brain boundary. This script has three constants that you may want to adjust

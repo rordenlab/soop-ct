@@ -126,10 +126,14 @@ def do_ants(template_path, input_path, directory="", others_path=[]):
 
     return warped_input_path, warped_others
 
+def get_num_threads():
+    cpu_count = os.cpu_count() or 1  # fallback to 1 if None
+    return max(1, cpu_count - 1)
+
 def do_synthsr(input_path, output_path, is_gpu=False, is_ct=False):
     cmd = ['mri_synthsr', '--i', str(input_path), '--o', str(output_path)]
     if not is_gpu:
-        cmd += ['--cpu', '--threads', '12']
+        cmd += ['--cpu', '--threads', str(get_num_threads())]
     if is_ct:
         cmd.append('--ct')
     logging.info('Running: %s', ' '.join(cmd))
@@ -327,8 +331,8 @@ def normalize(fnms, outdir = "", log_level = 'silent',  is_gpu = False, is_bet =
     if not check_nifti(fnms):
         sys.exit("Error: NIfTI files must have the same shape and orientation.")
     tmpdir = os.path.join(outdir, 'SYNcro_temp')
-    if os.path.exists(tmpdir):
-        shutil.rmtree(tmpdir)
+    #if os.path.exists(tmpdir):
+    #    shutil.rmtree(tmpdir)
     fnms = copy_nifti(tmpdir, fnms)
     are_binary = [nifti_min_max_binary(f)[2] for f in fnms]
     if not is_ct:
@@ -350,7 +354,7 @@ def normalize(fnms, outdir = "", log_level = 'silent',  is_gpu = False, is_bet =
     for fname, is_binary in zip(warped_others, are_binary):
         if is_binary:
             binarize_nifti(fname)
-    shutil.rmtree(tmpdir)
+    #shutil.rmtree(tmpdir)
     return warped_input, warped_others
 
 if __name__ == '__main__':

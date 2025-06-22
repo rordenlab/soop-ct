@@ -31,7 +31,7 @@ import shutil
 from pathlib import Path
 import argparse
 import sys
-
+from deshear import deshear_nifti
 import nibabel as nib
 
 LOG_LEVEL = logging.INFO                   # INFO or DEBUG for more detail
@@ -232,7 +232,7 @@ def main(input_dir: Path, output_dir: Path):
 
         dest_img = output_dir / f"{child.name}{OUT_EXT}"
         shutil.copy2(best_img, dest_img)
-        
+        deshear_nifti(str(dest_img))
         # Always get JSON using the base stem
         src_json = best_img.parent / f"{base_stem}.json"
         if src_json.exists():

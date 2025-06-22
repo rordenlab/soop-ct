@@ -23,6 +23,7 @@ def main(input_dir, output_dir="./raw"):
         "dcm2niix",
         "-i", "y",               # Ignore DICOMDIR if present
         "-f", "%g/%s_%p",        # Output filename pattern
+        "-w", "1",
         "-o", output_dir,
         input_dir
     ]
@@ -33,6 +34,14 @@ def main(input_dir, output_dir="./raw"):
     except subprocess.CalledProcessError as e:
         print("dcm2niix failed with error:", e)
         sys.exit(1)
+
+    # Final warning if output_dir already existed
+    output_preexists = os.path.exists(output_dir)
+    if output_preexists:
+        print("\n" + "*" * 70)
+        print(f"WARNING: Output directory already existed: {output_dir}")
+        print("   Existing files were NOT overwritten by dcm2niix.")
+        print("*" * 70 + "\n")
 
 if __name__ == "__main__":
     import sys
