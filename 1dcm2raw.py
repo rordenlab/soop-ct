@@ -16,7 +16,8 @@ def check_dcm2niix_available():
 def main(input_dir, output_dir="./raw"):
     input_dir = os.path.abspath(input_dir)
     output_dir = os.path.abspath(output_dir)
-
+    # Final warning if output_dir already existed
+    output_preexists = os.path.exists(output_dir)
     os.makedirs(output_dir, exist_ok=True)
 
     cmd = [
@@ -34,9 +35,6 @@ def main(input_dir, output_dir="./raw"):
     except subprocess.CalledProcessError as e:
         print("dcm2niix failed with error:", e)
         sys.exit(1)
-
-    # Final warning if output_dir already existed
-    output_preexists = os.path.exists(output_dir)
     if output_preexists:
         print("\n" + "*" * 70)
         print(f"WARNING: Output directory already existed: {output_dir}")

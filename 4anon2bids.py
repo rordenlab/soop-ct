@@ -56,7 +56,8 @@ def copy_anon_to_bids(input_dir: Path, output_dir: Path):
         shutil.copy2(nii, bids_img)
 
         # Copy .json
-        json_src = input_dir / f"{nii.stem}.json"
+        stem = nii.name.replace(".nii.gz", "").replace(".nii", "")
+        json_src = input_dir / f"{stem}.json"
         if json_src.exists():
             bids_json = bids_ct_dir / f"{bids_subj}_ct.json"
             shutil.copy2(json_src, bids_json)

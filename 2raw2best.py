@@ -97,7 +97,7 @@ def select_best_image(folder: Path) -> Path | None:
         if has_all_keywords(desc_upper, ["BONE"]):
             continue  # exclude this image
         kernel = ""
-        EXCLUDE_KERNELS = {"YB"}
+        EXCLUDE_KERNELS = {"YB", "D"}
         series_num = -1
         if json_path.exists():
             try:

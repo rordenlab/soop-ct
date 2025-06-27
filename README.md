@@ -93,6 +93,11 @@ The diagram below shows the six processing stages. Arrows indicate transformatio
  - Brain extraction: [BrainChop](https://github.com/neuroneural/brainchop-cli)
  - T1 synthesis: [SynthSR](https://surfer.nmr.mgh.harvard.edu/fswiki/SynthSR)
 
+## Related
+
+ - [PHE-SICH-CT-IDS: A Benchmark CT Image Dataset ](https://arxiv.org/abs/2308.10521) provides CT scans with annotations.
+ - [Acute Ischemic Infarct Segmentation](https://github.com/GriffinLiang/AISD) provides sample segmentations
+
 ## Citation
 
  - Absher, J., ... Rorden, C. (in prep). *SOOP-CT: Acute Stroke CT with Open Tools for De-Identification and Sharing*
